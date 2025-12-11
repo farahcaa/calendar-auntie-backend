@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="anonymous">
+        <sql>CREATE
+        EXTENSION IF NOT EXISTS "uuid-ossp";</sql>
+    </changeSet>
+
+    <changeSet id="1744412527445-1" author="chris farah (generated)">
+
+        <createTable tableName="customers">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(255)"/>
+
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="allow_marketing" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="addresses">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="address_type" type="VARCHAR(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="customer_id" type="UUID">
+                <constraints nullable="true" foreignKeyName="fk_address_customer" references="customers(id)"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/> <!-- Full name or label -->
+            <column name="line1" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="line2" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="VARCHAR(120)"/> <!-- state/province -->
+            <column name="postal_code" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country_code" type="VARCHAR(2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="products">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sku" type="VARCHAR(64)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inventory_qty" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="media">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_media_product" references="product(id)"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Many images per product; one primary enforced via partial unique index -->
+        <createTable tableName="product_media">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="product_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_product_media_product" references="products(id)" deleteCascade="true"/>
+            </column>
+            <column name="media_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_product_media_media" references="media(id)" deleteCascade="true"/>
+            </column>
+            <column name="is_primary" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="orders">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="customer_id" type="UUID">
+                <constraints nullable="true" foreignKeyName="fk_order_customer" references="customers(id)"/>
+            </column>
+            <column name="status" type="VARCHAR(32)" defaultValue="'pending'"/> <!-- pending, paid, fulfilled, cancelled, refunded -->
+            <column name="subtotal_price" type="DECIMAL(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shipping_price" type="DECIMAL(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tax_price" type="DECIMAL(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DECIMAL(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Snapshot addresses to preserve history at purchase time -->
+            <column name="billing_address_id" type="UUID"/>
+            <column name="shipping_address_id" type="UUID"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="order_items">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_item_order" references="orders(id)" deleteCascade="true"/>
+            </column>
+            <column name="product_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_item_product" references="products(id)"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/> <!-- snapshot title -->
+            <column name="sku" type="VARCHAR(64)"/>    <!-- snapshot sku -->
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unit_price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="shipments">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_shipment_order" references="orders(id)" deleteCascade="true"/>
+            </column>
+            <column name="tracking_number" type="VARCHAR(255)"/>
+            <column name="carrier" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(50)"/> <!-- created, in_transit, delivered, returned -->
+            <column name="shipped_at" type="TIMESTAMP"/>
+            <column name="delivered_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="transactions">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="order_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_transaction_order" references="orders(id)" deleteCascade="true"/>
+            </column>
+            <column name="payment_provider" type="VARCHAR(50)"/> <!-- stripe, paypal, etc. -->
+            <column name="provider_transaction_id" type="VARCHAR(255)"/>
+            <column name="amount" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="VARCHAR(10)" defaultValue="'USD'"/>
+            <column name="status" type="VARCHAR(50)"/> <!-- success, failed, pending, refunded -->
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+
+
+    </changeSet>
+</databaseChangeLog>
