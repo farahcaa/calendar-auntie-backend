@@ -34,14 +34,15 @@ dependencies {
 
     testImplementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
-    implementation("org.postgresql:postgresql:42.7.4")
-    implementation("org.liquibase:liquibase-core:4.30.0")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+    implementation("org.postgresql:postgresql:42.7.7")
     implementation("com.stripe:stripe-java:30.0.0")
 
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
-    implementation("io.minio:minio:8.5.17")
+    implementation("io.minio:minio:8.6.0")
 
 }
 
