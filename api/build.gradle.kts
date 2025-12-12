@@ -51,7 +51,7 @@ jib {
         image = "eclipse-temurin:21-jre"
     }
     to {
-        image = "ghcr.io/jaga/api:${project.version}"
+        image = "ghcr.io/calendar-auntie/api:${project.version}"
         tags = setOf("${project.version}", "latest")
     }
     container {

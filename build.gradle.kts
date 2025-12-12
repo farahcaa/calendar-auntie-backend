@@ -6,7 +6,7 @@ plugins {
 }
 
 allprojects {
-    group = "org.jaga"
+    group = "com.calendar-auntie"
     version = "0.1.0-SNAPSHOT"
 
     repositories {
