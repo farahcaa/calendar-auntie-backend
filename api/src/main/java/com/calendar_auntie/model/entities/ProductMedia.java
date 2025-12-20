@@ -10,19 +10,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "media")
 public class ProductMedia {
 
   @Id
-  @GeneratedValue(generator = "uuid")
   @Column(name = "id")
   private UUID id;
 
   @Column(name = "url")
   private String url;
 
+  @CreationTimestamp
   @Column(name = "created_at")
   private Instant createdAt;
 
@@ -55,6 +56,15 @@ public class ProductMedia {
   }
   public ProductMedia setCreatedAt(Instant createdAt) {
     this.createdAt = createdAt;
+    return this;
+  }
+
+  public Product getProduct() {
+    return product;
+  }
+
+  public ProductMedia setProduct(Product product) {
+    this.product = product;
     return this;
   }
 }

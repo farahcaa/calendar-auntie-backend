@@ -3,6 +3,7 @@ package com.calendar_auntie.model.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -38,7 +39,7 @@ public class Product {
   @Column(name = "inventory_qty")
   private int inventoryQty;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   private List<ProductMedia> media = new ArrayList<>();
   @Column(name = "is_active")
   private boolean isActive;
@@ -112,6 +113,14 @@ public class Product {
   }
   public Product setUpdatedAt(Instant updatedAt) {
     this.updatedAt = updatedAt;
+    return this;
+  }
+
+  public List<ProductMedia>  getMedia() {
+    return media;
+  }
+  public Product setMedia(List<ProductMedia> media) {
+    this.media = media;
     return this;
   }
 }

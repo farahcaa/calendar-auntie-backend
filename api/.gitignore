@@ -39,3 +39,4 @@ out/
 ### Spring Boot ###
 application-dev.properties
 application-prod.properties
+application.properties
