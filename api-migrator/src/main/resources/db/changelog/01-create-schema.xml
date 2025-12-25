@@ -220,6 +220,29 @@
             </column>
         </createTable>
 
+        <createTable tableName="config">
+            <column name="config_key" type="VARCHAR(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="tax" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="shipping" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="config">
+            <column name="config_key" value="default"/>
+            <column name="tax" valueNumeric="3.75"/>
+            <column name="shipping" valueNumeric="8.00"/>
+        </insert>
 
 
     </changeSet>

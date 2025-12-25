@@ -1,5 +1,7 @@
 package com.calendar_auntie.services;
 
+import com.calendar_auntie.model.dtos.ProductReviewCheckoutDTO;
+import java.util.List;
 import java.util.UUID;
 import com.calendar_auntie.model.dtos.ProductDTO;
 import com.calendar_auntie.model.mappers.ProductMapper;
@@ -19,10 +21,15 @@ public class ProductService {
   }
 
   public Page<ProductDTO> getProducts(Pageable pageable){
-    return productRepository.findAllByActiveTrue(pageable).map(productMapper::toDto);
+    return productRepository.findAllByIsActiveTrue(pageable).map(productMapper::toDto);
   }
 
   public ProductDTO getProductById(UUID id){
     return productRepository.findById(id).map(productMapper::toDto).orElse(null);
+  }
+
+  public List<ProductReviewCheckoutDTO> getProductsByIds(List<UUID> ids){
+    if (ids == null || ids.isEmpty()) return null;
+    return productRepository.findAllById(ids).stream().map(productMapper::toProductReviewCheckoutDTO).toList();
   }
 }

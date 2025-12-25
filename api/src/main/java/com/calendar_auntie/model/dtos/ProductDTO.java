@@ -1,4 +1,6 @@
 package com.calendar_auntie.model.dtos;
 
-public class ProductDTO {
+import java.util.UUID;
+
+public record ProductDTO(UUID id, String thumbnail, String title, double price, String description) {
 }

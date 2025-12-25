@@ -5,7 +5,7 @@ import com.calendar_auntie.model.entities.Product;
 import com.calendar_auntie.model.entities.ProductMedia;
 import com.calendar_auntie.model.repositories.ProductMediaRepository;
 import com.calendar_auntie.model.repositories.ProductRepository;
-import com.calendar_auntie.services.MediaFinderService;
+import com.calendar_auntie.services.MediaService;
 import com.calendar_auntie.services.MinioMediaPresignedURLCreatorService;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
@@ -39,12 +39,12 @@ public class MediaController {
     org.slf4j.LoggerFactory.getLogger(MediaController.class);
   private final MinioMediaPresignedURLCreatorService minioMediaPresignedURLCreatorService;
   private final ProductRepository productRepository;
-  private final MediaFinderService mediaFinderService;
+  private final MediaService mediaFinderService;
   private final ProductMediaRepository productMediaRepository;
 
   public MediaController(
     ProductMediaRepository productMediaRepository,
-    MediaFinderService mediaFinderService,
+    MediaService mediaFinderService,
     MinioMediaPresignedURLCreatorService minioMediaPresignedURLCreatorService,
     ProductRepository productRepository
    ) {

@@ -1,6 +1,7 @@
 package com.calendar_auntie.services;
 
 import io.minio.MinioClient;
+import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
 import io.minio.errors.ErrorResponseException;
@@ -12,20 +13,22 @@ import io.minio.errors.XmlParserException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MediaFinderService {
+public class MediaService {
 
   private final MinioClient minioClient;
-
+  private final Logger logger = LoggerFactory.getLogger(MediaService.class);
   @Value("${s3.media-bucket-name}")
   private String mediaBucketName;
 
   @Autowired
-  public MediaFinderService(MinioClient minioClient) {
+  public MediaService(MinioClient minioClient) {
     this.minioClient = minioClient;
   }
 
@@ -46,5 +49,19 @@ public class MediaFinderService {
     return statObjectResponse != null;
   }
 
+  public boolean deleteMediaByUrl( String url)
+    throws ServerException, InsufficientDataException, ErrorResponseException, IOException,
+    NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException,
+    InternalException {
+    try {
+      minioClient.removeObject(
+        RemoveObjectArgs.builder().bucket(mediaBucketName).object(url).build());
+      return true;
+    }
+    catch (ErrorResponseException e) {
+      logger.error(e.getMessage());
+      return false;
+    }
+  }
 
 }

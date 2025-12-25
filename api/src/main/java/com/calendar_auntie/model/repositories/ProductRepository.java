@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
-  Page<Product> findAllByActiveTrue(Pageable pageable);
+  Page<Product> findAllByIsActiveTrue(Pageable pageable);
 
   @NotNull Page<Product> findAll(@NotNull Pageable pageable);
 }
