@@ -24,7 +24,7 @@ public class AdminConfigController {
 
   @PostMapping
   public ResponseEntity<Object> postConfig(@RequestBody CheckoutPricingDTO dto) {
-    configService.setConfig(CheckoutPricingDTO);
+    configService.setConfig(dto);
     return ResponseEntity.ok(configService.getCheckoutPricing());
   }
 

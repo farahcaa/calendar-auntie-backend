@@ -30,9 +30,10 @@ public class ConfigService {
     Config config;
     if(configOptional.isPresent()){
       config = configOptional.get();
+      config.setShipping(checkoutPricingDTO.shipping());
+      config.setTax(checkoutPricingDTO.tax());
+      configRepository.save(config);
     }
-    config.setShipping(checkoutPricingDTO.shipping());
-    config.setTax(checkoutPricingDTO.tax());
-    configRepository.save(config);
+
   }
 }
