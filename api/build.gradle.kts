@@ -37,7 +37,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     implementation("org.postgresql:postgresql:42.7.7")
-    implementation("com.stripe:stripe-java:30.0.0")
+    implementation("com.stripe:stripe-java:31.1.0")
 
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
@@ -51,7 +51,7 @@ jib {
         image = "eclipse-temurin:21-jre"
     }
     to {
-        image = "ghcr.io/farahcaa/calendar-auntie-backend${project.name}:${project.version}"
+        image = "ghcr.io/farahcaa/calendar-auntie-backend/${project.name}:${project.version}"
         tags = setOf("${project.version}", "latest")
     }
     container {

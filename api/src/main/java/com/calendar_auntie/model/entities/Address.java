@@ -14,6 +14,8 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import com.calendar_auntie.model.enums.AddressType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "addresses")
@@ -53,9 +55,11 @@ public class Address {
   @Enumerated(EnumType.STRING)
   private AddressType addressType;
 
+  @CreationTimestamp
   @Column(name = "created_at")
   private Instant createdAt;
 
+  @UpdateTimestamp
   @Column(name = "updated_at")
   private Instant updatedAt;
 

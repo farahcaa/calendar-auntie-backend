@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -48,9 +49,10 @@ public class ProductController {
     }
     return new ResponseEntity<>(productDTO, HttpStatus.OK);
   }
-  @PostMapping("/products/items")
+
+  @GetMapping("/products/items")
   public ResponseEntity<List<ProductReviewCheckoutDTO>> getProductsByIds(
-    @RequestBody List<UUID> ids
+    @RequestParam List<UUID> ids
   ) {
     List<ProductReviewCheckoutDTO> products = productService.getProductsByIds(ids);
     return ResponseEntity.ok(products);

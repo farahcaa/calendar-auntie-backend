@@ -24,8 +24,9 @@ public class OrderItem {
   @JoinColumn(name = "order_id", nullable = false)
   private Order order;
 
-  @Column(name = "product_id", nullable = false)
-  private UUID productId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id")
+  private Product product;
 
   @Column(name = "title")
   private String title;
@@ -37,10 +38,10 @@ public class OrderItem {
   private Integer quantity;
 
   @Column(name = "unit_price", nullable = false)
-  private BigDecimal unitPrice;
+  private double unitPrice;
 
   @Column(name = "total_price", nullable = false)
-  private BigDecimal totalPrice;
+  private double totalPrice;
 
   public OrderItem() {}
 
@@ -58,11 +59,11 @@ public class OrderItem {
     this.order = order;
     return this;
   }
-  public UUID getProductId() {
-    return productId;
+  public Product getProduct() {
+    return product;
   }
-  public OrderItem setProductId(UUID productId) {
-    this.productId = productId;
+  public OrderItem setProduct(Product product) {
+    this.product = product;
     return this;
   }
   public String getTitle() {
@@ -86,17 +87,17 @@ public class OrderItem {
     this.quantity = quantity;
     return this;
   }
-  public BigDecimal getUnitPrice() {
+  public double getUnitPrice() {
     return unitPrice;
   }
-  public OrderItem setUnitPrice(BigDecimal unitPrice) {
+  public OrderItem setUnitPrice(double unitPrice) {
     this.unitPrice = unitPrice;
     return this;
   }
-  public BigDecimal getTotalPrice() {
+  public double getTotalPrice() {
     return totalPrice;
   }
-  public OrderItem setTotalPrice(BigDecimal totalPrice) {
+  public OrderItem setTotalPrice(double totalPrice) {
     this.totalPrice = totalPrice;
     return this;
   }

@@ -1,5 +1,6 @@
 package com.calendar_auntie.model.entities;
 
+import com.calendar_auntie.model.enums.AddressType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,22 +41,26 @@ public class Order {
   private OrderStatus status = OrderStatus.PENDING;
 
   @Column(name = "subtotal_price", nullable = false)
-  private long subtotalPrice = 0;
+  private double subtotalPrice = 0;
 
   @Column(name = "shipping_price", nullable = false)
-  private long shippingPrice = 0;
+  private double shippingPrice = 0;
 
   @Column(name = "tax_price", nullable = false)
-  private long taxPrice = 0;
+  private double taxPrice = 0;
 
   @Column(name = "total_price", nullable = false)
-  private long totalPrice = 0;
+  private double totalPrice = 0;
 
   @Column(name = "billing_address_id")
   private UUID billingAddressId;
 
-  @Column(name = "shipping_address_id")
-  private UUID shippingAddressId;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
+  private Address shippingAddress;
+
+  @Column(name = "stripe_payment_intent_id")
+  private String stripePaymentIntentId;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -107,31 +112,31 @@ public class Order {
     this.status = status;
     return this;
   }
-  public long getSubtotalPrice() {
+  public double getSubtotalPrice() {
     return subtotalPrice;
   }
-  public Order setSubtotalPrice(long subtotalPrice) {
+  public Order setSubtotalPrice(double subtotalPrice) {
     this.subtotalPrice = subtotalPrice;
     return this;
   }
-  public long getShippingPrice() {
+  public double getShippingPrice() {
     return shippingPrice;
   }
-  public Order setShippingPrice(long shippingPrice) {
+  public Order setShippingPrice(double shippingPrice) {
     this.shippingPrice = shippingPrice;
     return this;
   }
-  public long getTaxPrice() {
+  public double getTaxPrice() {
     return taxPrice;
   }
-  public Order setTaxPrice(long taxPrice) {
+  public Order setTaxPrice(double taxPrice) {
     this.taxPrice = taxPrice;
     return this;
   }
-  public long getTotalPrice() {
+  public double getTotalPrice() {
     return totalPrice;
   }
-  public Order setTotalPrice(long totalPrice) {
+  public Order setTotalPrice(double totalPrice) {
     this.totalPrice = totalPrice;
     return this;
   }
@@ -142,11 +147,12 @@ public class Order {
     this.billingAddressId = billingAddressId;
     return this;
   }
-  public UUID getShippingAddressId() {
-    return shippingAddressId;
+  public Address getShippingAddress() {
+    return shippingAddress;
   }
-  public Order setShippingAddressId(UUID shippingAddressId) {
-    this.shippingAddressId = shippingAddressId;
+  
+  public Order setShippingAddress(Address shippingAddress) {
+    this.shippingAddress = shippingAddress;
     return this;
   }
   public Instant getCreatedAt() {
@@ -171,4 +177,12 @@ public class Order {
     return this;
   }
 
+  public Order setStripePaymentIntentID(String stripePaymentIntentId) {
+    this.stripePaymentIntentId = stripePaymentIntentId;
+    return this;
+  }
+
+  public String getStripePaymentIntentID() {
+    return stripePaymentIntentId;
+  }
 }

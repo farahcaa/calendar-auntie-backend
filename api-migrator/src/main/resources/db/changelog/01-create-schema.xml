@@ -137,6 +137,7 @@
             <column name="customer_id" type="UUID">
                 <constraints nullable="true" foreignKeyName="fk_order_customer" references="customers(id)"/>
             </column>
+            <column name="stripe_payment_intent_id" type="VARCHAR(50)" />
             <column name="status" type="VARCHAR(32)" defaultValue="'pending'"/> <!-- pending, paid, fulfilled, cancelled, refunded -->
             <column name="subtotal_price" type="DECIMAL(10,2)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
