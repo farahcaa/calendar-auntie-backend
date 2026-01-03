@@ -6,9 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/admin/config")
+@RestController
+@RequestMapping("/admin/config")
 public class AdminConfigController {
 
   private final ConfigService configService;
@@ -17,10 +19,6 @@ public class AdminConfigController {
     this.configService = configService;
   }
 
-  @GetMapping("/")
-  public ResponseEntity<Object> getConfig() {
-    return ResponseEntity.ok(configService.getCheckoutPricing());
-  }
 
   @PostMapping
   public ResponseEntity<Object> postConfig(@RequestBody CheckoutPricingDTO dto) {

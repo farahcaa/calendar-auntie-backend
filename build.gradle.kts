@@ -28,3 +28,16 @@ subprojects {
         useJUnitPlatform()
     }
 }
+/**
+ * HOW TO RUN JIB DOCKER ENGINE MUST BE RUNNING
+ *
+ * run "echo "<GHCR_token>" | docker login ghcr.io -u <your-github-username> --password-stdin" - this will log you in to the registry
+ *
+ * ./gradlew jib - runs the jib and builds to the docker registery
+ *
+ * dont forget to run this on the campsucribs machine
+ * echo "GCHR-GCP TOKen" | sudo docker login ghcr.io -u farahcaa --password-stdin
+ *
+ * For one module use
+ * ./gradlew :api:jib
+ */
