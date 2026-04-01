@@ -38,6 +38,12 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}
 
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
       - name: Authenticate Docker on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@100.74.111.58 \
