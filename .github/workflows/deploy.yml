@@ -49,7 +49,7 @@ jobs:
       - name: Authenticate Docker on server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@100.74.111.58 \
-            "echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+            "echo '${{ secrets.GITHUB_PAT }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
 
       - name: Deploy over Tailscale SSH
         run: |
