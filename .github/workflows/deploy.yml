@@ -1,0 +1,53 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Build and push image with Jib
+        run: |
+          ./gradlew jib \
+            -Djib.to.image=ghcr.io/${{ github.repository }}:latest \
+            -Djib.to.auth.username=${{ github.actor }} \
+            -Djib.to.auth.password=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}
+
+      - name: Authenticate Docker on server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@100.74.111.58 \
+            "echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+
+      - name: Deploy over Tailscale SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@100.74.111.58 << 'EOF'
+            cd /home/chris/calendar-auntie
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
+          EOF

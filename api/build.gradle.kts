@@ -31,12 +31,14 @@ dependencies {
 
     implementation("org.hibernate.orm:hibernate-core:6.6.2.Final")
     implementation("org.hibernate.validator:hibernate-validator:8.0.2.Final")
+    implementation("org.liquibase:liquibase-core")
+    implementation("org.postgresql:postgresql:42.7.7")
 
     testImplementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
-    implementation("org.postgresql:postgresql:42.7.7")
+
     implementation("com.stripe:stripe-java:31.1.0")
 
     implementation("org.mapstruct:mapstruct:1.6.3")

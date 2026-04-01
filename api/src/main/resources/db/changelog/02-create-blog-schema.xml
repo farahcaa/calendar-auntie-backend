@@ -1,0 +1,71 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="create-blog-category-and-post" author="chris">
+        <createTable tableName="blog_category">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="slug" type="VARCHAR(120)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="description" type="TEXT"/>
+
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="blog_post">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="category_id" type="UUID">
+                <constraints nullable="false" foreignKeyName="fk_blog_post_category" references="blog_category(id)"/>
+            </column>
+
+            <column name="title" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="slug" type="VARCHAR(220)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="excerpt" type="TEXT"/>
+
+            <column name="body_markdown" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="blog_post" indexName="idx_blog_post_category_id">
+            <column name="category_id"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>
